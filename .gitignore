@@ -26,4 +26,4 @@ core/.classpath
 # generated files
 bin/
 gen/
-settings.xml
+bintray-settings.xml

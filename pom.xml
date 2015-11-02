@@ -3,12 +3,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>7</version>
-    </parent>
-
     <groupId>net.glxn.qrgen</groupId>
     <artifactId>qrgen-parent</artifactId>
     <version>2.1-SNAPSHOT</version>
@@ -28,6 +22,7 @@
         <connection>scm:git:git@github.com:kenglxn/QRGen.git</connection>
         <developerConnection>scm:git:git@github.com:kenglxn/QRGen.git</developerConnection>
         <url>git@github.com:kenglxn/QRGen.git</url>
+        <tag>HEAD</tag>
     </scm>
 
     <developers>
@@ -78,46 +73,43 @@
         </plugins>
     </reporting>
 
+    <distributionManagement>
+      <repository>
+        <id>bintray</id>
+        <url>https://api.bintray.com/maven/kenglxn/maven/QRGen</url>
+      </repository>
+    </distributionManagement>
+
     <profiles>
-        <profile>
-            <id>sonatype-oss-release</id>
-            <distributionManagement>
-                <repository>
-                    <id>sonatype-oss-release</id>
-                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-                </repository>
-            </distributionManagement>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>${maven-gpg-plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>${nexus-staging-maven-plugin.version}</version>
-                        <extensions>true</extensions>
-                        <configuration>
-                            <serverId>sonatype-oss-release</serverId>
-                            <stagingProfileId>172315fda45a8</stagingProfileId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
+      <profile>
+        <id>release</id>
+        <build>
+          <plugins>
+            <plugin>
+              <artifactId>maven-source-plugin</artifactId>
+              <executions>
+                <execution>
+                  <id>attach-sources</id>
+                  <goals>
+                    <goal>jar</goal>
+                  </goals>
+                </execution>
+              </executions>
+            </plugin>
+            <plugin>
+              <artifactId>maven-javadoc-plugin</artifactId>
+              <executions>
+                <execution>
+                  <id>attach-javadocs</id>
+                  <goals>
+                    <goal>jar</goal>
+                  </goals>
+                </execution>
+              </executions>
+            </plugin>
+          </plugins>
+        </build>
+      </profile>
     </profiles>
 
     <build>
@@ -141,6 +133,15 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+              <artifactId>maven-release-plugin</artifactId>
+              <version>2.4.1</version>
+              <configuration>
+                <useReleaseProfile>false</useReleaseProfile>
+                <releaseProfiles>release</releaseProfiles>
+                <autoVersionSubmodules>true</autoVersionSubmodules>
+              </configuration>
             </plugin>
         </plugins>
     </build>

@@ -157,3 +157,13 @@ myImage.setImageBitmap(myBitmap);
 #### License:
 
 http://www.apache.org/licenses/LICENSE-2.0.html
+
+
+### Creating a new release
+
+Since releasing to sonatype and central is such a pain, we now use bintray instead.
+
+    mvn -Prelease clean install -s ./bintray-settings.xml
+    mvn release:prepare -s ./bintray-settings.xml
+    mvn release:perform -s ./bintray-settings.xml
+    # go to bintray and synt to central
